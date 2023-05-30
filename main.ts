@@ -17,6 +17,8 @@ function sendeParkplatzStatusMitLoRaWAN (parkplatzBesetzt: boolean) {
     IoTCube.SendBuffer(IoTCube.getCayenne())
     basic.pause(5100)
 }
+let differenzLichtstärke = 0
+let gemesseneLichtstärke = 0
 let datenZumSenden = 0
 let istParkplatzBesetzt = false
 let distanzAuto = 0
@@ -36,6 +38,15 @@ basic.forever(function () {
         music.playTone(262, music.beat(BeatFraction.Whole))
         gesendeterParkplatzStatus = istParkplatzBesetzt
         sendeParkplatzStatusMitLoRaWAN(istParkplatzBesetzt)
+    }
+    gemesseneLichtstärke = input.lightLevel()
+    differenzLichtstärke = Math.abs(gesendeteLichtstaerke - gemesseneLichtstärke)
+    if (differenzLichtstärke > 50) {
+        music.playTone(523, music.beat(BeatFraction.Whole))
+        gesendeteLichtstaerke = gemesseneLichtstärke
+        IoTCube.addIlluminance(gesendeteLichtstaerke, 1)
+        IoTCube.SendBuffer(IoTCube.getCayenne())
+        basic.pause(5000)
     }
     basic.pause(500)
 })
