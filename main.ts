@@ -1,5 +1,5 @@
 function prüfeObParkplatzBesetzt () {
-    distanzAuto = grove.measureInCentimetersV2(DigitalPin.P0)
+    distanzAuto = smartfeldSensoren.measureInCentimetersV2(DigitalPin.P0)
     if (distanzAuto < 10) {
         istParkplatzBesetzt = true
     } else {
@@ -13,13 +13,16 @@ function sendeParkplatzStatusMitLoRaWAN (parkplatzBesetzt: boolean) {
     } else {
         datenZumSenden = 0
     }
-    IoTCube.addDigitalInput(datenZumSenden, 1)
-    IoTCube.SendBuffer(IoTCube.getCayenne())
-    basic.pause(5100)
+    if (IoTCube.getStatus(eSTATUS_MASK.JOINED)) {
+        IoTCube.addDigitalInput(datenZumSenden, 1)
+        IoTCube.SendBuffer(IoTCube.getCayenne())
+        basic.pause(2000)
+    }
 }
 let datenZumSenden = 0
 let istParkplatzBesetzt = false
 let distanzAuto = 0
+smartfeldAktoren.displayInit(128, 64)
 IoTCube.LoRa_Join(
 eBool.enable,
 eBool.enable,
@@ -28,8 +31,8 @@ eBool.enable,
 )
 let gesendeterParkplatzStatus = !(prüfeObParkplatzBesetzt())
 let gesendeteLichtstaerke = -100
-basic.showIcon(IconNames.Yes)
-basic.clearScreen()
+basic.showIcon(IconNames.Pitchfork)
+smartfeldAktoren.displayWriteStrNewLine("IoT cube ready!")
 basic.forever(function () {
     istParkplatzBesetzt = prüfeObParkplatzBesetzt()
     if (istParkplatzBesetzt != gesendeterParkplatzStatus) {
