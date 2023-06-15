@@ -5,8 +5,8 @@
         "core": "*",
         "radio": "*",
         "microphone": "*",
-        "LoRa-AT-Interface": "github:paeber/lora-at-interface#1dcedff79902c964515abfc9134293b124ad6abf",
-        "Grove": "github:seeed-studio/pxt-grove#v0.5.0"
+        "LoRa-AT-Interface": "github:paeber/lora-at-interface#447e0175ec1104950a62011e3535b3e6d525759d",
+        "pxt-SensorikSmartfeld": "github:SamuelBaw/pxt-sensorikSmartfeld#9ef3f2fa8d2e8bb212b176e4d4758294e95f8c0c"
     },
     "files": [
         "main.blocks",
